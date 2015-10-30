@@ -12,7 +12,7 @@ var app = express();
 app.use(formData.parse(...connectMultipartyOptions));
 // change all request body to json format
 app.use(formData.json());
-// create node stream.Readable from elements in req.files and add them in req.stream
+// create node stream.Readable from elements in req.files and add its in req.stream
 app.use(formData.stream());
 // union body and files
 app.use(formData.union());
