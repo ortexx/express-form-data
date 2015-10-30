@@ -14,8 +14,8 @@ app.use(formData.parse(...connectMultipartyOptions));
 app.use(formData.json());
 // create node stream.Readable from elements in req.files and add them in req.stream
 app.use(formData.stream());
-// add all information to req.data
-app.use(formData.data());
+// union body and files
+app.use(formData.union());
 ```
 
 After this functions we can see in req:
