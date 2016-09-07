@@ -1,6 +1,6 @@
 {
     "name": "express-form-data",
-    "version": "0.0.1",
+    "version": "1.0.0",
     "description": "Module for parsing multiform data",
     "main": "./express-form-data.js",
     "author": {
