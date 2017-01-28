@@ -1,13 +1,14 @@
-var multipart = require('connect-multiparty');
-var util = require('util');
-var fs = require('fs');
+"use strict";
 
-var formData = {};
+let multipart = require('connect-multiparty');
+let fs = require('fs');
+
+let formData = {};
 
 function format(obj, fn) {
-  for(var k in obj) {
+  for(let k in obj) {
     if(Array.isArray(obj[k])) {
-      for(var i = 0; i < obj[k].length; i++) {
+      for(let i = 0; i < obj[k].length; i++) {
         obj[k][i] = fn(obj[k][i]);
 
         if(!obj[k][i]) {
@@ -38,7 +39,7 @@ function format(obj, fn) {
 
 formData.parse = function (options) {
   return multipart(options);
-}
+};
 
 formData.format = function() {
   return function (req, res, next) {
@@ -46,15 +47,13 @@ formData.format = function() {
       if(obj.size <= 0) {
         return null;
       }
-      else {
-        delete obj.fieldName;
-      }
 
       return obj;
     });
+
     next();
   }
-}
+};
 
 formData.stream = function() {
   return function (req, res, next) {
@@ -64,13 +63,13 @@ formData.stream = function() {
 
     next();
   }
-}
+};
 
 formData.union = function () {
   return function (req, res, next) {
-    util._extend(req.body, req.files);
+    Object.assign(req.body, req.files);
     next();
   }
-}
+};
 
 module.exports = formData;

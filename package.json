@@ -1,6 +1,6 @@
 {
   "name": "express-form-data",
-  "version": "1.0.1",
+  "version": "2.0.0",
   "description": "Module for parsing multiform data",
   "main": "./express-form-data.js",
   "author": {
@@ -15,11 +15,24 @@
     "json"
   ],
   "license": "MIT",
+  "scripts": {
+    "test": "mocha"
+  },
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "connect": "^3.5.0",
+    "fs-extra": "^2.0.0",
+    "mocha": "^3.2.0",
+    "supertest": "^2.0.1"
+  },
   "dependencies": {
     "connect-multiparty": "^2.0.0"
   },
-  "repository" : {
-    "type" : "git",
-    "url" : "https://github.com/ortexx/express-form-data"
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ortexx/express-form-data"
+  },
+  "engines": {
+    "node": ">=5.0.0"
   }
 }
