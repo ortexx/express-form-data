@@ -6,9 +6,9 @@ Module for parsing multiform data. Based on "connect-multiparty"
 
 # Example
 ```js
-var formData = require("express-form-data");
-var express = require("express");
-var app = express();
+const formData = require("express-form-data");
+const express = require("express");
+const app = express();
 
 // parsing data with connect-multiparty. 
 app.use(formData.parse(...connectMultipartyOptions));
