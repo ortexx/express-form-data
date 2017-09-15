@@ -7,14 +7,14 @@
     "name": "Balasyan Alexandr",
     "email": "mywebstreet@gmail.com"
   },
+  "license": "MIT",
   "keywords": [
     "express",
     "form",
     "data",
     "multipart",
     "json"
-  ],
-  "license": "MIT",
+  ], 
   "scripts": {
     "test": "mocha"
   },
