@@ -6,8 +6,7 @@
   "author": {
     "name": "Balasyan Alexandr",
     "email": "mywebstreet@gmail.com"
-  },
-  "license": "MIT",
+  },  
   "keywords": [
     "express",
     "form",
@@ -15,6 +14,7 @@
     "multipart",
     "json"
   ], 
+  "license": "MIT",
   "scripts": {
     "test": "mocha"
   },
