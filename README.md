@@ -1,5 +1,5 @@
 # express-form-data
-Module for parsing multiform data. Based on "connect-multiparty"
+Module to parse multiform data. Based on [connect-multiparty](https://github.com/expressjs/connect-multiparty)
 
 # Install 
 `npm install express-form-data`
@@ -10,8 +10,12 @@ const formData = require("express-form-data");
 const express = require("express");
 const app = express();
 
-// parsing data with connect-multiparty. 
-app.use(formData.parse(...connectMultipartyOptions));
+const multipartyOptions = {
+  autoFiles: true;
+};
+
+// parse a data with connect-multiparty. 
+app.use(formData.parse(multipartyOptions));
 // clear all empty files (size == 0)
 app.use(formData.format());
 // change file objects to node stream.Readable 
