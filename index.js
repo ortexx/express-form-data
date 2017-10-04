@@ -1,9 +1,9 @@
 "use strict";
 
-let multipart = require('connect-multiparty');
-let fs = require('fs');
+const multipart = require('connect-multiparty');
+const fs = require('fs');
 
-let formData = {};
+const formData = {};
 
 function format(obj, fn) {
   for(let k in obj) {
@@ -52,7 +52,7 @@ formData.format = function() {
     });
 
     next();
-  }
+  };
 };
 
 formData.stream = function() {
@@ -62,14 +62,14 @@ formData.stream = function() {
     });
 
     next();
-  }
+  };
 };
 
 formData.union = function () {
   return function (req, res, next) {
     Object.assign(req.body, req.files);
     next();
-  }
+  };
 };
 
 module.exports = formData;

@@ -6,7 +6,7 @@ const path = require('path');
 const fs = require('fs-extra');
 const request = require('supertest');
 const stream = require('stream');
-const formData = require('../express-form-data');
+const formData = require('../index');
 
 describe('ExpressFormData:', function () {
   before(function() {
