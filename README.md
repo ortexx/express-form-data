@@ -14,7 +14,7 @@ const multipartyOptions = {
   autoFiles: true;
 };
 
-// parse a data with connect-multiparty. 
+// parse data with connect-multiparty. 
 app.use(formData.parse(multipartyOptions));
 // clear all empty files (size == 0)
 app.use(formData.format());
