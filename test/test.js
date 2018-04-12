@@ -45,7 +45,7 @@ describe('ExpressFormData:', function () {
       .end(callback)
   }
 
-  it('.parse', function (done) {
+  it('should work .parse()', function (done) {
     let app = createApp();
 
     app.use(function(req, res){
@@ -60,7 +60,7 @@ describe('ExpressFormData:', function () {
     createRequest(app, done);
   });
 
-  it('.format', function (done) {
+  it('should work .format()', function (done) {
     let app = createApp();
 
     app.use(formData.format());
@@ -73,7 +73,7 @@ describe('ExpressFormData:', function () {
     createRequest(app, done);
   });
 
-  it('.stream', function (done) {
+  it('should work .stream()', function (done) {
     let app = createApp();
 
     app.use(formData.stream());
@@ -86,7 +86,7 @@ describe('ExpressFormData:', function () {
     createRequest(app, done);
   });
 
-  it('.union', function (done) {
+  it('should work .union()', function (done) {
     let app = createApp();
 
     app.use(formData.stream());

@@ -24,6 +24,6 @@ app.use(formData.stream());
 app.use(formData.union());
 ```
 
-After this functions we can see in req:  
+After this we can see in req:  
 * req.files = {...} all files  
-* req.body = {...} all data including files(or streams if you use .stream())
+* req.body = {...} all data including files (or streams if you use .stream())
