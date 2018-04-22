@@ -9,12 +9,14 @@ const stream = require('stream');
 const formData = require('../index');
 
 describe('ExpressFormData:', function () {
-  before(function() {
-    fs.ensureDirSync(path.join(__dirname, 'tmp'));
+  const tempDir = path.join(__dirname, 'tmp');
+
+  before(() => {
+    fs.ensureDirSync(tempDir);
   });
 
-  after(function() {
-    fs.removeSync(path.join(__dirname, 'tmp'));
+  after(() => {
+    fs.removeSync(tempDir);
   });
 
   let userName = 'Alex';
@@ -24,14 +26,15 @@ describe('ExpressFormData:', function () {
     let app = connect();
 
     app.use(formData.parse({
-      uploadDir: path.join(__dirname, 'tmp')
+      uploadDir: path.join(__dirname, 'tmp'),
+      autoClean: true
     }));
 
     return app;
   }
 
   function createRequest(app, callback) {
-    app.use(function(req, res){
+    app.use((req, res) => {
       res.end(req.files.info.originalFilename);
     });
 
@@ -45,13 +48,14 @@ describe('ExpressFormData:', function () {
       .end(callback)
   }
 
-  it('should work .parse()', function (done) {
+  it('should parse', function (done) {
     let app = createApp();
 
-    app.use(function(req, res){
+    app.use((req, res) => {
       assert.equal(req.body.user.name, userName);
       assert.equal(req.body.user.email, userEmail);
       assert.equal(req.files.info.originalFilename, 'info.txt');
+      assert.isTrue(fs.existsSync(req.files.info.path));
       assert.equal(req.files.zero.originalFilename, 'zero.txt');
       assert.isOk(req.files.info.size > 0);
       res.end();
@@ -60,25 +64,24 @@ describe('ExpressFormData:', function () {
     createRequest(app, done);
   });
 
-  it('should work .format()', function (done) {
+  it('should format', function (done) {
     let app = createApp();
-
     app.use(formData.format());
 
-    app.use(function(req, res){
+    app.use((req, res) => {
       assert.isUndefined(req.files.zero);
+      assert.lengthOf(fs.readdirSync(tempDir), 1);
       res.end();
     });
 
     createRequest(app, done);
   });
 
-  it('should work .stream()', function (done) {
+  it('should make stream files', function (done) {
     let app = createApp();
-
     app.use(formData.stream());
 
-    app.use(function(req, res){
+    app.use((req, res) => {
       assert.instanceOf(req.files.info, stream.Readable);
       res.end();
     });
@@ -86,9 +89,8 @@ describe('ExpressFormData:', function () {
     createRequest(app, done);
   });
 
-  it('should work .union()', function (done) {
+  it('should union', (done) => {
     let app = createApp();
-
     app.use(formData.stream());
     app.use(formData.union());
 
@@ -100,6 +102,13 @@ describe('ExpressFormData:', function () {
     });
 
     createRequest(app, done);
+  });
+
+  it('should clean all', done => {
+    setTimeout(() => {
+      assert.lengthOf(fs.readdirSync(tempDir), 0);
+      done();
+    });    
   });
 });
 

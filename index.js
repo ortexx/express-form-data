@@ -1,13 +1,13 @@
 "use strict";
 
 const multipart = require('connect-multiparty');
-const fs = require('fs');
+const fs = require('fs-extra');
 const formData = {};
 
-function format(obj, fn) {
+function format (obj, fn) {
   for(let k in obj) {
     if(Array.isArray(obj[k])) {
-      for(let i = 0; i < obj[k].length; i++) {
+      for(let i = 0, l = obj[k].length; i < l; i++) {
         obj[k][i] = fn(obj[k][i]);
 
         if(!obj[k][i]) {
@@ -37,29 +37,49 @@ function format(obj, fn) {
 }
 
 formData.parse = function (options) {
-  return multipart(options);
+  return function (req, res) {
+    if(options.autoClean) {
+      res.on('finish', () => {
+        const clean = [];
+
+        for(let key in req.files) {
+          const file = req.files[key];
+
+          clean.push(Promise.resolve().then(() => {
+            if(fs.exists(file.path)) {
+              return fs.remove(file.path);
+            }
+          }));
+        }
+        
+        Promise.all(clean).catch(err => console.log(err));
+      });
+    }
+
+    return multipart(options).apply(this, arguments);
+  }
 };
 
-formData.format = function() {
+formData.format = function () {
   return function (req, res, next) {
-    format(req.files, function(obj) {
+    const clean = [];
+
+    format(req.files, obj => {
       if(obj.size <= 0) {
+        clean.push(fs.remove(obj.path));
         return null;
       }
 
       return obj;
     });
 
-    next();
+    Promise.all(clean).then(() => next()).catch(next);
   };
 };
 
-formData.stream = function() {
+formData.stream = function () {
   return function (req, res, next) {
-    format(req.files, function(obj) {
-      return fs.createReadStream(obj.path);
-    });
-
+    format(req.files, obj => fs.createReadStream(obj.path));
     next();
   };
 };
