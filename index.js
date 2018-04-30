@@ -38,7 +38,7 @@ function format (obj, fn) {
 
 formData.parse = function (options) {
   return function (req, res) {
-    if(options.autoClean) {
+    if(options && options.autoClean) {
       res.on('finish', () => {
         const clean = [];
 
