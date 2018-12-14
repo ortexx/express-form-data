@@ -45,10 +45,10 @@ formData.parse = function (options) {
         for(let key in req.files) {
           const file = req.files[key];
 
-          clean.push(Promise.resolve().then(() => {
-            if(fs.exists(file.path)) {
+          clean.push(fs.exists(file.path).then((exists) => {
+            if(exists) {
               return fs.remove(file.path);
-            }
+            }            
           }));
         }
         
