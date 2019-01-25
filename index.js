@@ -1,7 +1,8 @@
 "use strict";
 
 const multipart = require('connect-multiparty');
-const fs = require('fs-extra');
+const fse = require('fs-extra');
+const fs = require('fs');
 const formData = {};
 
 function format (obj, fn) {
@@ -38,23 +39,24 @@ function format (obj, fn) {
 
 formData.parse = function (options) {
   return function (req, res) {
-    if(options && options.autoClean) {
-      res.on('finish', () => {
-        const clean = [];
+    res.on('finish', () => {
+      const clean = [];
 
-        for(let key in req.files) {
-          const file = req.files[key];
-
-          clean.push(fs.exists(file.path).then((exists) => {
+      for(let key in req.files) {
+        const file = req.files[key];
+        file instanceof fs.ReadStream && file.destroy && file.destroy();
+        
+        if(options && options.autoClean) {
+          clean.push(fse.exists(file.path).then((exists) => {
             if(exists) {
-              return fs.remove(file.path);
+              return fse.remove(file.path);
             }            
           }));
         }
-        
-        Promise.all(clean).catch(err => console.log(err));
-      });
-    }
+      }
+      
+      Promise.all(clean).catch(err => console.log(err.stack));
+    });
 
     return multipart(options).apply(this, arguments);
   }
@@ -66,7 +68,7 @@ formData.format = function () {
 
     format(req.files, obj => {
       if(obj.size <= 0) {
-        clean.push(fs.remove(obj.path));
+        clean.push(fse.remove(obj.path));
         return null;
       }
 
