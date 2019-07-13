@@ -1,6 +1,6 @@
 {
   "name": "express-form-data",
-  "version": "2.0.8",
+  "version": "2.0.10",
   "description": "Module to parse multipart/form data",
   "main": "./index.js",
   "author": {
@@ -20,13 +20,13 @@
     "test": "mocha"
   },
   "devDependencies": {
-    "connect": "^3.5.0",
-    "chai": "^4.0.0",
-    "mocha": "^5.0.0",
-    "supertest": "^3.0.0"
+    "chai": "^4.2.0",
+    "connect": "^3.7.0",
+    "mocha": "^5.2.0",
+    "supertest": "^3.4.2"
   },
   "dependencies": {
-    "connect-multiparty": "^2.0.0",
+    "connect-multiparty": "^2.2.0",
     "fs-extra": "^5.0.0"
   },
   "repository": {

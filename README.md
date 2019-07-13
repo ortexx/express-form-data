@@ -23,11 +23,11 @@ const options = {
 
 // parse data with connect-multiparty. 
 app.use(formData.parse(options));
-// clear from the request and delete all empty files (size == 0)
+// delete from the request all empty files (size == 0)
 app.use(formData.format());
-// change file objects to stream.Readable 
+// change the file objects to fs.ReadStream 
 app.use(formData.stream());
-// union body and files
+// union the body and the files
 app.use(formData.union());
 ```
 

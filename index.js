@@ -50,7 +50,7 @@ formData.parse = function (options) {
           clean.push(fse.exists(file.path).then((exists) => {
             if(exists) {
               return fse.remove(file.path);
-            }            
+            }
           }));
         }
       }
