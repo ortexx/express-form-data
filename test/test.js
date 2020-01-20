@@ -42,8 +42,8 @@ describe('ExpressFormData:', function () {
       .post('/')
       .field('user[name]', userName)
       .field('user[email]', userEmail)
-      .attach('info', new Buffer('file text'), 'info.txt')
-      .attach('zero', new Buffer(''), 'zero.txt')
+      .attach('info', Buffer.from('file text'), 'info.txt')
+      .attach('zero', Buffer.from(''), 'zero.txt')
       .expect(200)
       .end(callback)
   }

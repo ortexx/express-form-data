@@ -47,15 +47,15 @@ formData.parse = function (options) {
         file instanceof fs.ReadStream && file.destroy && file.destroy();
         
         if(options && options.autoClean) {
-          clean.push(fse.exists(file.path).then((exists) => {
-            if(exists) {
-              return fse.remove(file.path);
-            }
+          clean.push(new Promise((resolve, reject) => {
+            fse.remove(file.path).then(resolve).catch(err => {
+              err.code == 'ENOENT'? resolve(): reject(err);
+            });
           }));
         }
       }
       
-      Promise.all(clean).catch(err => console.log(err.stack));
+      Promise.all(clean).catch(err => console.warn(err.stack));
     });
 
     return multipart(options).apply(this, arguments);
