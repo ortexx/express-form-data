@@ -4,7 +4,7 @@
   "description": "Module to parse multipart/form data",
   "main": "./index.js",
   "author": {
-    "name": "Balasyan Alexandr",
+    "name": "Alexander Balasyan",
     "email": "mywebstreet@gmail.com"
   },
   "keywords": [
