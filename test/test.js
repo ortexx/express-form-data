@@ -70,7 +70,7 @@ describe('ExpressFormData:', function () {
 
     app.use((req, res) => {
       assert.isUndefined(req.files.zero);
-      assert.lengthOf(fse.readdirSync(tempDir), 1);
+      assert.lengthOf(fse.readdirSync(tempDir), 1);      
       res.end();
     });
 
