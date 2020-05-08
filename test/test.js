@@ -104,6 +104,24 @@ describe('ExpressFormData:', function () {
     createRequest(app, done);
   });
 
+  it('should handle several files', function (done) {
+    let app = createApp();
+    app.use(formData.format());
+    app.use(formData.stream());
+
+    app.use((req, res) => {
+      assert.lengthOf(req.files.arr, 2);
+      res.end();
+    });
+
+    request(app)
+      .post('/')
+      .attach('arr', Buffer.from('file1'), 'file1.txt')
+      .attach('arr', Buffer.from('file2'), 'file2.txt')
+      .expect(200)
+      .end(done)
+  });
+
   it('should clean all', done => {
     setTimeout(() => {
       assert.lengthOf(fse.readdirSync(tempDir), 0);

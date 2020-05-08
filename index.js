@@ -5,6 +5,28 @@ const fse = require('fs-extra');
 const fs = require('fs');
 const formData = {};
 
+function autoClean(files) {
+  const clean = [];
+      
+  format(files, (file) => {
+    file instanceof fs.ReadStream && file.destroy && file.destroy();
+    
+    if(typeof file != 'object' || typeof file.path != 'string') {
+      return null;
+    }
+    
+    clean.push(new Promise((resolve, reject) => {
+      fse.remove(file.path).then(resolve).catch(err => {
+        err.code == 'ENOENT'? resolve(): reject(err);
+      });
+    }));
+
+    return null;
+  });
+  
+  Promise.all(clean).catch(err => console.warn(err.stack));
+}
+
 function format (obj, fn) {
   for(let k in obj) {
     if(Array.isArray(obj[k])) {
@@ -20,7 +42,12 @@ function format (obj, fn) {
         delete obj[k];
       }
     }
-    else if(typeof obj[k] == 'object' && !obj[k].hasOwnProperty('originalFilename')) {
+    else if(
+      obj[k] &&
+      typeof obj[k] == 'object' && 
+      !obj[k].hasOwnProperty('originalFilename') &&
+      !(obj[k] instanceof fs.ReadStream)
+    ) {
       format(obj[k], fn);
 
       if(!Object.keys(obj[k]).length) {
@@ -39,24 +66,10 @@ function format (obj, fn) {
 
 formData.parse = function (options) {
   return function (req, res) {
-    res.on('finish', () => {
-      const clean = [];
-
-      for(let key in req.files) {
-        const file = req.files[key];
-        file instanceof fs.ReadStream && file.destroy && file.destroy();
-        
-        if(options && options.autoClean) {
-          clean.push(new Promise((resolve, reject) => {
-            fse.remove(file.path).then(resolve).catch(err => {
-              err.code == 'ENOENT'? resolve(): reject(err);
-            });
-          }));
-        }
-      }
-      
-      Promise.all(clean).catch(err => console.warn(err.stack));
-    });
+    if(options && options.autoClean) {
+      req.on('close', () => autoClean(req.files));
+      res.on('finish', () => autoClean(req.files));      
+    }    
 
     return multipart(options).apply(this, arguments);
   }
