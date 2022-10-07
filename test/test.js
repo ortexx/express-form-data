@@ -123,10 +123,8 @@ describe('ExpressFormData:', function () {
   });
 
   it('should clean all', done => {
-    setTimeout(() => {
-      assert.lengthOf(fse.readdirSync(tempDir), 0);
-      done();
-    });    
+    assert.lengthOf(fse.readdirSync(tempDir), 0);
+    done();
   });
 });
 

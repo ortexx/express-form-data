@@ -3,14 +3,15 @@
 const multipart = require('connect-multiparty');
 const fse = require('fs-extra');
 const fs = require('fs');
+const onExit = require('signal-exit');
 const formData = {};
 
 function autoClean(files) {
   const clean = [];
-      
+
   format(files, (file) => {
     file instanceof fs.ReadStream && file.destroy && file.destroy();
-    
+
     if(typeof file != 'object' || typeof file.path != 'string') {
       return null;
     }
@@ -21,10 +22,27 @@ function autoClean(files) {
       });
     }));
 
-    return null;
+    return file;
   });
   
   Promise.all(clean).catch(err => console.warn(err.stack));
+}
+
+function cleanSync(files) {      
+  format(files, (file) => {
+    file instanceof fs.ReadStream && file.destroy && file.destroy();
+    
+    if(typeof file != 'object' || typeof file.path != 'string') {
+      return;
+    }
+    
+    try {
+      fse.removeSync(file.path);
+    }
+    catch(err) {
+      console.warn(err.stack);
+    }    
+  });
 }
 
 function format (obj, fn) {
@@ -50,7 +68,7 @@ function format (obj, fn) {
     ) {
       format(obj[k], fn);
 
-      if(!Object.keys(obj[k]).length) {
+      if(!Object.keys(obj[k]).length) {       
         delete obj[k];
       }
     }
@@ -69,6 +87,7 @@ formData.parse = function (options) {
     if(options && options.autoClean) {
       req.on('close', () => autoClean(req.files));
       res.on('finish', () => autoClean(req.files));      
+      onExit(() => cleanSync(req.files));
     }    
 
     return multipart(options).apply(this, arguments);

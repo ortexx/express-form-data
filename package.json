@@ -1,6 +1,6 @@
 {
   "name": "express-form-data",
-  "version": "2.0.18",
+  "version": "2.0.19",
   "description": "Module to parse multipart/form data",
   "main": "./index.js",
   "author": {
@@ -27,7 +27,8 @@
   },
   "dependencies": {
     "connect-multiparty": "^2.2.0",
-    "fs-extra": "^9.1.0"
+    "fs-extra": "^9.1.0",
+    "signal-exit": "^3.0.7"
   },
   "repository": {
     "type": "git",
