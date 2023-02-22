@@ -26,7 +26,7 @@ function autoClean(files, onExitRemover) {
   });
   
   Promise.all(clean)
-    .then(() => onExitRemover && onExitRemover())
+    .finally(() => onExitRemover && onExitRemover())
     .catch(err => console.warn(err.stack));
 }
 

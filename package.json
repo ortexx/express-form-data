@@ -1,6 +1,6 @@
 {
   "name": "express-form-data",
-  "version": "2.0.21",
+  "version": "2.0.22",
   "description": "Module to parse multipart/form data",
   "main": "./index.js",
   "author": {
@@ -35,6 +35,6 @@
     "url": "https://github.com/ortexx/express-form-data"
   },
   "engines": {
-    "node": ">=5.0.0"
+    "node": ">=10.7.0"
   }
 }
