@@ -4,9 +4,9 @@ const multipart = require('connect-multiparty');
 const fse = require('fs-extra');
 const fs = require('fs');
 const onExit = require('signal-exit');
-const formData = { onExitListener: null };
+const formData = {};
 
-function autoClean(files) {
+function autoClean(files, onExitRemover) {
   const clean = [];
 
   format(files, (file) => {
@@ -25,7 +25,7 @@ function autoClean(files) {
     return file;
   });
   
-  Promise.all(clean).catch(err => console.warn(err.stack));
+  Promise.all(clean).then(() => onExitRemover && onExitRemover()).catch(err => console.warn(err.stack));
 }
 
 function cleanSync(files) {      
@@ -85,10 +85,9 @@ function format (obj, fn) {
 formData.parse = function (options) {
   return function (req, res) {
     if(options && options.autoClean) {
-      req.on('close', () => autoClean(req.files));
-      res.on('finish', () => autoClean(req.files));
-      formData.onExitListener && formData.onExitListener();   
-      formData.onExitListener = onExit(() => cleanSync(req.files));
+      const onExitRemover = onExit(() => cleanSync(req.files));
+      req.on('close', () => autoClean(req.files, onExitRemover));
+      res.on('finish', () => autoClean(req.files, onExitRemover));
     }    
 
     return multipart(options).apply(this, arguments);
