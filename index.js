@@ -25,7 +25,9 @@ function autoClean(files, onExitRemover) {
     return file;
   });
   
-  Promise.all(clean).then(() => onExitRemover && onExitRemover()).catch(err => console.warn(err.stack));
+  Promise.all(clean)
+    .then(() => onExitRemover && onExitRemover())
+    .catch(err => console.warn(err.stack));
 }
 
 function cleanSync(files) {      
