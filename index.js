@@ -85,7 +85,7 @@ function format (obj, fn) {
 }
 
 formData.parse = function (options) {
-  return function (req, res) {
+  return function (req, res, next) {
     if(options && options.autoClean) {
       const onExitRemover = onExit(() => cleanSync(req.files));
       req.on('close', () => autoClean(req.files, onExitRemover));
