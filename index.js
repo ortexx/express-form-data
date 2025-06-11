@@ -1,6 +1,6 @@
 "use strict";
 
-const multipart = require('connect-multiparty');
+const multipart = require('./connect.js');
 const fse = require('fs-extra');
 const fs = require('fs');
 const onExit = require('signal-exit');

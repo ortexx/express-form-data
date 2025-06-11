@@ -1,5 +1,5 @@
 # express-form-data
-Module to parse multipart/form data. Based on [connect-multiparty](https://github.com/expressjs/connect-multiparty)
+Module to parse multipart/form data.
 
 # Install 
 `npm install express-form-data`
