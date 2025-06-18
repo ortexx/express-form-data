@@ -11,8 +11,8 @@ function multipart (options) {
     if (req._body) return next();
     req.body = req.body || {};
     req.files = req.files || {};
-    ('GET' === req.method || 'HEAD') === req.method && next();
-    (!typeis(req, 'multipart/form-data')) && next();
+    if ('GET' === req.method || 'HEAD' === req.method) return next();
+    if (!typeis(req, 'multipart/form-data')) return next();
     req._body = true;
     let form = new multiparty.Form(options);
     let data = {};
